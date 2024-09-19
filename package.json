@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/http/server.ts",
-    "seed": "tsx watch src/db/seed.ts"
+    "seed": "tsx src/db/seed.ts"
   },
   "keywords": [],
   "author": "",
