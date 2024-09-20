@@ -14,11 +14,42 @@ datasource db {
 }
 
 model users {
- id Int @id @default(autoincrement())
- name String
- email String @unique
- password String
- birthDate DateTime
- createdAt DateTime @default(now()) 
- updatedAt DateTime @updatedAt
+  id            Int             @id @default(autoincrement())
+  name          String
+  email         String          @unique
+  password      String
+  birthDate     DateTime
+  status        Boolean         @default(true)
+  prescriptions prescriptions[]
+}
+
+model medicines {
+  id            Int             @id @default(autoincrement())
+  name          String
+  useCase       String
+  dosage        String
+  status        Boolean         @default(true)
+  prescriptions prescriptions[]
+}
+
+model prescriptions {
+  id             Int       @id @default(autoincrement())
+  user           users     @relation(fields: [userId], references: [id])
+  userId         Int
+  medicine       medicines @relation(fields: [medicineId], references: [id])
+  medicineId     Int
+  notes          String?
+  frequencyHours Int
+  startDate      DateTime
+  endDate        DateTime
+  status         Boolean   @default(true)
+  history        history[]
+}
+
+model history {
+  id             Int           @id @default(autoincrement())
+  prescription   prescriptions @relation(fields: [prescriptionId], references: [id])
+  prescriptionId Int
+  currentDate    DateTime
+  status         Boolean       @default(true)
 }

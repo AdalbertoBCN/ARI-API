@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
-import { createUserRoutes } from "./routes/create-user";
-import { getUsersRoute } from "./routes/get-users";
+import { createUserRoutes } from "./routes/user/create-user";
+import { getUsersRoute } from "./routes/user/get-users";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
