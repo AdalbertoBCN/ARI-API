@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./db/dev.db"
 }
 
 model users {
@@ -34,22 +34,32 @@ model medicines {
 
 model prescriptions {
   id             Int       @id @default(autoincrement())
-  user           users     @relation(fields: [userId], references: [id])
   userId         Int
-  medicine       medicines @relation(fields: [medicineId], references: [id])
   medicineId     Int
   notes          String?
   frequencyHours Int
   startDate      DateTime
   endDate        DateTime
   status         Boolean   @default(true)
+
   history        history[]
+  medicine       medicines @relation(fields: [medicineId], references: [id])
+  user           users     @relation(fields: [userId], references: [id])
+}
+
+model logs{
+  id            Int       @id @default(autoincrement())
+  dateIngestion DateTime
+  historyId     Int
+
+  history       history   @relation(fields: [historyId], references: [id])
 }
 
 model history {
   id             Int           @id @default(autoincrement())
   prescription   prescriptions @relation(fields: [prescriptionId], references: [id])
   prescriptionId Int
-  currentDate    DateTime
+  
+  logs          logs[]
   status         Boolean       @default(true)
 }

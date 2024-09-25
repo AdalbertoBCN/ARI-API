@@ -2,7 +2,7 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
 
-export const updateUserRoutes: FastifyPluginAsyncZod = async function (app) {
+export const updateMedicineRoutes: FastifyPluginAsyncZod = async function (app) {
     app.put("/medicines", {
         schema: {
             body: z.object({

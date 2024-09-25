@@ -2,8 +2,8 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
 
-export const deleteMedicineRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.delete("/medicines", {
+export const deletePrescriptionRoutes: FastifyPluginAsyncZod = async function (app) {
+    app.delete("/prescription", {
         schema: {
             body: z.object({
                 id: z.coerce.number(),
@@ -12,7 +12,7 @@ export const deleteMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
     }, async (req) => {
         const { id } = req.body;
 
-        await prisma.medicines.update({
+        await prisma.prescriptions.update({
             where: { id },
             data: {
                 status: false
