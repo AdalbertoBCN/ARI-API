@@ -6,8 +6,16 @@ export const deleteHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
     app.delete("/history", {
         schema: {
             body: z.object({
-                id: z.coerce.number(),
+                id: z.coerce.number().describe("Identificador do histórico a ser deletado"),
             }),
+            response:{
+                200: z.object({
+                    message: z.string()
+                }).describe("Histórico deletado com sucesso")
+            },
+            tags:["Histórico"],
+            summary: 'Deletar um histórico',
+            description: 'Esta rota deleta um histórico do banco de dados.',
         }
     }, async (req) => {
         const { id } = req.body;
@@ -18,5 +26,10 @@ export const deleteHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
                 status: false
             }
         });
+
+        return {
+            message: "Histórico deletado com sucesso"
+        };
+        
     });
 };

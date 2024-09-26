@@ -6,12 +6,20 @@ export const updateMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
     app.put("/medicines", {
         schema: {
             body: z.object({
-                id: z.coerce.number(),
-                name: z.string().optional(),
-                useCase: z.string().optional(),
-                dosage: z.string().optional(),
-                status: z.boolean().optional(),
+                id: z.coerce.number().describe("ID do medicamento"),
+                name: z.string().optional().describe("Nome do medicamento"),
+                useCase: z.string().optional().describe("Finalidade do medicamento"),
+                dosage: z.string().optional().describe("Dosagem do medicamento"),
+                status: z.boolean().optional().describe("Status do medicamento"),
             }),
+            response: {
+                201: z.object({
+                    message: z.string()
+                }).describe("Medicamento atualizado com sucesso")
+            },
+            tags:["Medicamento"],
+            summary: 'Atualizar um medicamento',
+            description: 'Esta rota atualiza um medicamento no banco de dados.',
         }
     }, async (req) => {
         const { id, name, useCase, dosage, status } = req.body;
@@ -25,6 +33,9 @@ export const updateMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
                 status
             }
         });;
-
+        
+        return {
+            message: "Medicamento atualizado com sucesso"
+        };
     });
 };

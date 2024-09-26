@@ -6,12 +6,20 @@ export const updateUserRoutes: FastifyPluginAsyncZod = async function (app) {
     app.put("/users", {
         schema: {
             body: z.object({
-                id: z.coerce.number(),
-                name: z.string().optional(),
-                email: z.string().email().optional(),
-                password: z.string().optional(),
-                birthDate: z.coerce.date().optional(),
+                id: z.coerce.number().describe("Identificador do usuário a ser atualizado"),
+                name: z.string().optional().describe("Nome do usuário"),
+                email: z.string().email().optional().describe("Email do usuário"),
+                password: z.string().optional().describe("Senha do usuário"),
+                birthDate: z.coerce.date().optional().describe("Data de nascimento do usuário"),
             }),
+            response: {
+                201: z.object({
+                    message: z.string()
+                }).describe("Usuário atualizado com sucesso!")
+            },
+            tags:["Usuário"],
+            summary: 'Atualizar um usuário',
+            description: 'Esta rota atualiza um usuário do banco de dados.',
         }
     }, async (req) => {
         const { id, name, email, password, birthDate } = req.body
@@ -27,5 +35,9 @@ export const updateUserRoutes: FastifyPluginAsyncZod = async function (app) {
                 birthDate
             }
         });
+
+        return {
+            message: "Usuário atualizado com sucesso"
+        };
     })
 };

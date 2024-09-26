@@ -6,10 +6,18 @@ export const createMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
     app.post("/medicines", {
         schema: {
             body: z.object({
-                name: z.string(),
-                useCase: z.string(),
-                dosage: z.string(),
+                name: z.string().describe("Nome do medicamento"),
+                useCase: z.string().describe("Para que serve o medicamento"),
+                dosage: z.string().describe("Dosagem do medicamento"),
             }),
+            response: {
+                200: z.object({
+                    message: z.string()
+                }).describe("Medicamento criado com sucesso")
+            },
+            tags:["Medicamento"],
+            summary: 'Criar um medicamento',
+            description: 'Esta rota cria um medicamento no banco de dados.',
         }
     }, async (req) => {
         const { name, useCase, dosage } = req.body;
@@ -21,5 +29,9 @@ export const createMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
                 dosage
             }
         });
+
+        return {
+            message: "Medicamento criado com sucesso"
+        };
     });
 };

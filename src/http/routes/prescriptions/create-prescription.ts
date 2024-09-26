@@ -3,16 +3,24 @@ import { prisma } from "../../prisma";
 import z from "zod";
 
 export const createPrescriptionRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.post("/prescription", {
+    app.post("/prescriptions", {
         schema: {
             body: z.object({
-                userId: z.number(),
-                medicineId: z.number(),
-                frequencyHours: z.number(),
-                notes: z.string().optional(),
-                startDate: z.date(),
-                endDate: z.date(),
+                userId: z.number().describe("ID do usuário"),
+                medicineId: z.number().describe("ID do medicamento"),
+                frequencyHours: z.number().describe("Horas de frequência"),
+                notes: z.string().optional().describe("Notas").optional(),
+                startDate: z.date().describe("Data de início"),
+                endDate: z.date().describe("Data de término"),
             }),
+            response: {
+                201: z.object({
+                    message: z.string()
+                }).describe("Prescrição criada com sucesso")
+            },
+            tags:["Prescrição"],
+            summary: 'Criar uma prescrição',
+            description: 'Esta rota cria uma prescrição no banco de dados.',
         }
     }, async (req) => {
         const { userId, medicineId, frequencyHours, notes, startDate, endDate  } = req.body;
@@ -27,5 +35,9 @@ export const createPrescriptionRoutes: FastifyPluginAsyncZod = async function (a
                 endDate,
             }
         });
+
+        return {
+            message: "Prescrição criada com sucesso"
+        };
     });
 };
