@@ -21,6 +21,7 @@ import { deleteHistoryRoutes } from "./routes/history/delete-history";
 import { createLogRoutes } from "./routes/logs/create-log";
 import { getHistoryRoutes } from "./routes/history/get-history";
 import { getLogsRoutes } from "./routes/logs/get-log";
+import { loginUserRoutes } from "./routes/auth/login";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -59,6 +60,11 @@ app.register(deleteHistoryRoutes);
 app.register(createLogRoutes);
 app.register(getLogsRoutes);
 
+
+// Autenticação
+
+app.register(loginUserRoutes);
+
 // Inicializando o servidor
 app.listen({
     port: 3333
@@ -66,3 +72,5 @@ app.listen({
     console.log("Server HTTP running at http://localhost:3333");
     console.log("Documentation running at http://localhost:3333/documentation");
 });
+
+

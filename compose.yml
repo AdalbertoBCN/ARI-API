@@ -1,0 +1,11 @@
+name: lab2
+
+services:
+  postgres:
+    image: postgres:12.20-alpine
+    ports:
+      - "5431:5431"
+    environment:
+      POSTGRES_USER: lab2
+      POSTGRES_PASSWORD: lab2
+      POSTGRES_DB: lab2
