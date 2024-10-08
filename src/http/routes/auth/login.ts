@@ -5,7 +5,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { prisma } from '../../prisma';
 import { AES, enc } from "crypto-js"
 import { env } from '../../../env';
-import { generateToken } from '../../../functions/jwt';
+import { generateToken } from '../../../config/jwt';
 
 export const loginUserRoutes: FastifyPluginAsyncZod = async function (app) {
     app.post("/login", {

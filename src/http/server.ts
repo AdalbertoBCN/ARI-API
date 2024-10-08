@@ -22,6 +22,8 @@ import { createLogRoutes } from "./routes/logs/create-log";
 import { getHistoryRoutes } from "./routes/history/get-history";
 import { getLogsRoutes } from "./routes/logs/get-log";
 import { loginUserRoutes } from "./routes/auth/login";
+import { logoutUserRoutes } from "./routes/auth/logout";
+
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -64,6 +66,7 @@ app.register(getLogsRoutes);
 // Autenticação
 
 app.register(loginUserRoutes);
+app.register(logoutUserRoutes)
 
 // Inicializando o servidor
 app.listen({

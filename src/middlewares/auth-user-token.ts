@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { verifyToken } from '../functions/jwt';
+import { verifyToken } from '../config/jwt';
 import { JwtPayload } from 'jsonwebtoken';
 
 export const authToken = async (
@@ -16,7 +16,7 @@ export const authToken = async (
   
     try {
       const user = verifyToken(token);
-      
+
       req.user = user;
     } catch (error) {
       return res.status(403).send({ message: 'Token inválido' });
