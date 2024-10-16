@@ -8,21 +8,29 @@ import { createUserRoutes } from "./routes/user/create-user";
 import { getUsersRoutes } from "./routes/user/get-users";
 import { deleteUserRoutes } from "./routes/user/delete-user";
 import { updateUserRoutes } from "./routes/user/update-user";
+
+import { createMedicineRoutes } from "./routes/medicines/create-medicine";
 import { getMedicineRoutes } from "./routes/medicines/get-medicines";
 import { deleteMedicineRoutes } from "./routes/medicines/delete-medicine";
-import { createMedicineRoutes } from "./routes/medicines/create-medicine";
 import { updateMedicineRoutes } from "./routes/medicines/update-medicine";
+
 import { createPrescriptionRoutes } from "./routes/prescriptions/create-prescription";
-import { getPrescriptionsRoutes } from "./routes/prescriptions/get-prescription";
+import { getPrescriptionsRoutes } from "./routes/prescriptions/get-prescriptions";
 import { deletePrescriptionRoutes } from "./routes/prescriptions/delete-prescription";
 import { updatePrescriptionRoutes } from "./routes/prescriptions/update-prescription";
+
 import { createHistoryRoutes } from "./routes/history/create-history";
-import { deleteHistoryRoutes } from "./routes/history/delete-history";
-import { createLogRoutes } from "./routes/logs/create-log";
 import { getHistoryRoutes } from "./routes/history/get-history";
+import { deleteHistoryRoutes } from "./routes/history/delete-history";
+
+import { createLogRoutes } from "./routes/logs/create-log";
 import { getLogsRoutes } from "./routes/logs/get-log";
+
 import { loginUserRoutes } from "./routes/auth/login";
 import { logoutUserRoutes } from "./routes/auth/logout";
+import { createResponsibleRoutes } from "./routes/responsibles/create-responsible";
+import { deleteResponsibleRoutes } from "./routes/responsibles/delete-responsible";
+import { getResponsiblesRoutes } from "./routes/responsibles/get-responsibles";
 
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -40,6 +48,11 @@ app.register(createUserRoutes);
 app.register(getUsersRoutes);
 app.register(deleteUserRoutes);
 app.register(updateUserRoutes);
+
+// Responsibles
+app.register(getResponsiblesRoutes);
+app.register(createResponsibleRoutes);
+app.register(deleteResponsibleRoutes);
 
 // Medicines
 app.register(createMedicineRoutes);
@@ -61,7 +74,6 @@ app.register(deleteHistoryRoutes);
 // Logs
 app.register(createLogRoutes);
 app.register(getLogsRoutes);
-
 
 // Autenticação
 

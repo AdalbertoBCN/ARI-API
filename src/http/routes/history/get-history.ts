@@ -8,7 +8,6 @@ export const getHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
                 200: z.object({
                     history: z.array(z.object({
                         id: z.number(),
-                        userId: z.number(),
                         prescriptionId: z.number(),
                         status: z.boolean()
                     }))
@@ -22,7 +21,7 @@ export const getHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
         const history = await prisma.history.findMany({
             where: {
                 status: true
-            }
+            },
         });
         return {
             history

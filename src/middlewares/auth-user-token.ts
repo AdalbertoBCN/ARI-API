@@ -18,6 +18,7 @@ export const authToken = async (
       const user = verifyToken(token);
 
       req.user = user;
+      
     } catch (error) {
       return res.status(403).send({ message: 'Token inválido' });
     }

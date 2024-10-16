@@ -18,8 +18,13 @@ model users {
   name          String
   email         String          @unique
   password      String
-  birthDate     DateTime
+  birthDate     DateTime        
   status        Boolean         @default(true)
+
+  // Relacionamento como paciente e responsável
+  patients      patients_responsibles[]     @relation("patients_relations")
+  responsibles  patients_responsibles[]     @relation("responsibles_relations")
+
   prescriptions prescriptions[]
 }
 
@@ -42,6 +47,7 @@ model prescriptions {
   endDate        DateTime
   status         Boolean   @default(true)
 
+
   history        history[]
   medicine       medicines @relation(fields: [medicineId], references: [id])
   user           users     @relation(fields: [userId], references: [id])
@@ -62,4 +68,15 @@ model history {
   
   logs          logs[]
   status         Boolean       @default(true)
+}
+
+model patients_responsibles {
+  patientId     Int
+  responsibleId Int
+
+  patient       users @relation("patients_relations", fields: [patientId], references: [id])
+  responsible   users @relation("responsibles_relations", fields: [responsibleId], references: [id])
+
+  @@id([patientId, responsibleId])
+  @@unique([patientId, responsibleId])
 }
