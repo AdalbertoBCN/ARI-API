@@ -1,26 +1,23 @@
-import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
-import { prisma } from "../http/prisma";
 import { z } from "zod";
 import { isResponsible } from "../config/permissions";
 import { FastifyReply, FastifyRequest } from "fastify";
+import { verifyToken } from "../config/jwt";
 
 const getPrescriptionsSchema = z.object({
     patientId: z.coerce.number(),
-    userId: z.coerce.number(),
 });
 
 export const userPermission = async (
     req: FastifyRequest,
-    res: FastifyReply,
-    done: (err?: Error) => void
-  ): Promise<void> => {
-    const { patientId, userId } =  getPrescriptionsSchema.parse(req.params)
+    res: FastifyReply
+): Promise<void> => {
+    const token = req.headers["authorization"]?.split(" ")[1] as string;
+    const { patientId } = getPrescriptionsSchema.parse(req.params);
+    const { id } = verifyToken(token);
 
-    if(userId === patientId){
-        done();
-    }else if(!(await isResponsible(patientId, userId))){
-        return res.status(403).send({ message: 'Usuário não autorizado' });
+    if (id === patientId || await isResponsible(patientId, id)) {
+        return; 
     }
 
-    done();
-  };
+    return res.status(403).send({ message: 'Usuário não autorizado' });
+};

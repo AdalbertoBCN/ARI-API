@@ -4,10 +4,10 @@ import fastify from "fastify";
 import { serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
 import { setupSwagger } from "../config/swagger"; // Importando a configuração do Swagger
 
-import { createUserRoutes } from "./routes/user/create-user";
-import { getUsersRoutes } from "./routes/user/get-users";
-import { deleteUserRoutes } from "./routes/user/delete-user";
-import { updateUserRoutes } from "./routes/user/update-user";
+import { createUserRoutes } from "@/user/create-user";
+import { getUsersRoutes } from "@/user/get-users";
+import { deleteUserRoutes } from "@/user/delete-user";
+import { updateUserRoutes } from "@/user/update-user";
 
 import { createMedicineRoutes } from "./routes/medicines/create-medicine";
 import { getMedicineRoutes } from "./routes/medicines/get-medicines";

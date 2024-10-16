@@ -2,15 +2,15 @@ import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import { z } from "zod";
 import { userPermission } from "../../../middlewares/user-permission";
+import { authToken } from "../../../middlewares/auth-user-token";
 
 export const getResponsiblesRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.get("/responsible/:userId/:patientId", {
-        preHandler: userPermission,
+    app.get("/responsible/:patientId", {
+        preHandler: [authToken, userPermission],
         schema: {
             params: z.object({
-                userId: z.coerce.number(),
                 patientId: z.coerce.number(),
-            }),
+            }), 
             response: {
                 200: z.object({
                     responsibles: z.array(

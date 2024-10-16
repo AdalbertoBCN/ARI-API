@@ -8,7 +8,7 @@ export const logoutUserRoutes: FastifyPluginAsyncZod = async function (app) {
             summary: 'Deslogar usuário',
             description: 'Desloga o usuário da aplicação',
         }
-    }, async (req, res) => {
+    }, async (req) => {
         const token = req.headers.authorization?.split(' ')[1];
 
         if (!token) {

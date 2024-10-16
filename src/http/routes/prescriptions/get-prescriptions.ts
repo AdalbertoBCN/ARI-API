@@ -1,12 +1,16 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import { z } from "zod";
-import { userPermission } from "../../../middlewares/user-permission";
+import { authToken } from "@middleware/auth-user-token";
+import { userPermission } from "@middleware/user-permission";
 
 export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.get("/prescriptions/:userId/:patientId",{ 
-        preHandler: userPermission,
+    app.get("/prescriptions/:patientId",{ 
+        preHandler: [authToken, userPermission],
         schema:{
+            params:z.object({
+                patientId: z.coerce.number()
+            }),
             response:{
                 200: z.object({
                     prescriptions: z.array(z.object({
@@ -21,10 +25,14 @@ export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app
             summary: "Listar prescrições",
             description: "Esta rota retorna uma lista de prescrições cadastradas no banco de dados."
         }
-    }, async () => {
+    }, async (req) => {
+
+        const { patientId } = req.params
+
         const prescriptions = await prisma.prescriptions.findMany({
             where:{
-                status: true
+                status: true,
+                userId: patientId
             }
         });
 

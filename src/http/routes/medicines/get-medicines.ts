@@ -1,8 +1,11 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
+import { userPermission } from "@middleware/user-permission";
+import { authToken } from "@middleware/auth-user-token";
 export const getMedicineRoutes: FastifyPluginAsyncZod = async function (app) {
     app.get("/medicines",{
+        preHandler: [authToken, userPermission],
         schema:{
             response:{
                 200: z.object({

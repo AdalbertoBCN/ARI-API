@@ -12,8 +12,8 @@ export const getLogsRoutes: FastifyPluginAsyncZod = async function (app) {
                 200: z.object({
                     logs: z.array(z.object({
                         id: z.number(),
+                        dateIngestion: z.date(),
                         historyId: z.number(),
-                        dateIngestion: z.string()
                     }))
                 }).describe("Lista de logs")
             },

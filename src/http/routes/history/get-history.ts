@@ -1,8 +1,11 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
+import { authToken } from "@middleware/auth-user-token";
+import { userPermission } from "@middleware/user-permission";
 export const getHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
     app.get("/history",{
+        preHandler: [authToken, userPermission],
         schema:{
             response:{
                 200: z.object({

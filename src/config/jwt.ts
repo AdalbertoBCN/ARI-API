@@ -12,7 +12,7 @@ export const verifyToken = (token:string) => {
         throw new Error('Token inválido');
     }
 
-    return jwt.verify(token, env.JWT_SECRET);
+    return jwt.verify(token, env.JWT_SECRET) as { id:number };
 }
 
 export const addTokenInBlackList = (token:string) => {

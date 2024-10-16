@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { prisma } from '../../prisma';
+import { userPermission } from '@middleware/user-permission';
+import { authToken } from '@middleware/auth-user-token';
 
 export const updateUserRoutes: FastifyPluginAsyncZod = async function (app) {
     app.put("/users", {
+        preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
                 id: z.coerce.number().describe("Identificador do usuário a ser atualizado"),

@@ -1,9 +1,12 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
+import { authToken } from "../../../middlewares/auth-user-token";
+import { userPermission } from "../../../middlewares/user-permission";
 
 export const createResponsibleRoutes: FastifyPluginAsyncZod = async function (app) {
     app.post("/responsible", {
+        preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
                 patientId: z.coerce.number().describe("Id do paciente"),

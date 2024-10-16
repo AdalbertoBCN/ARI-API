@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { prisma } from '../../prisma';
+import { userPermission } from '../../../middlewares/user-permission';
+import { authToken } from '../../../middlewares/auth-user-token';
 
 export const deleteResponsibleRoutes: FastifyPluginAsyncZod = async function (app) {
     app.delete("/responsibles", {
+        preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
                 patientId: z.coerce.number().describe("Id do paciente"),

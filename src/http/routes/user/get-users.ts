@@ -1,11 +1,12 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { prisma } from '../../prisma';
 import z from 'zod';
-import { authToken } from '../../../middlewares/auth-user-token';
+import { authToken } from '@middleware/auth-user-token';
+import { userPermission } from '@middleware/user-permission';
 
 export const getUsersRoutes: FastifyPluginAsyncZod = async function (app) {
     app.get("/users",{
-        preHandler: authToken,
+        preHandler: [authToken, userPermission],
         schema:{
             response:{
                 200: z.object({

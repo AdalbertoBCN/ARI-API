@@ -1,9 +1,12 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { prisma } from "../../prisma";
 import z from "zod";
+import { authToken } from "@middleware/auth-user-token";
+import { userPermission } from "@middleware/user-permission";
 
 export const createHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
     app.post("/history", {
+        preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
                 prescriptionId: z.coerce.number().describe("Identificador da prescrição"),
