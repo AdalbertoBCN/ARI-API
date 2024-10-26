@@ -27,13 +27,13 @@ export const createUserRoutes: FastifyPluginAsyncZod = async function (app) {
     }, async (req) => {
         const { name, email, password, birthDate } = req.body;
 
-        const cryptoPassword = AES.encrypt(password, env.CRYPTO_SECRET).toString()
+        const encryptedPassword = AES.encrypt(password, env.CRYPTO_SECRET).toString()
 
         await prisma.users.create({
             data: {
                 name,
                 email,
-                password: cryptoPassword,
+                password: encryptedPassword,
                 birthDate
             }
         });
