@@ -1,11 +1,11 @@
-// src/routes/user/create-user.ts
-
 import { z } from 'zod';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { prisma } from '../../prisma';
 import { AES, enc } from "crypto-js"
 import { env } from '../../../env';
 import { generateToken } from '../../../config/jwt';
+import { StatusCodes } from 'http-status-codes';
+import { decrypt } from '../../../lib/crypto';
 
 export const loginUserRoutes: FastifyPluginAsyncZod = async function (app) {
     app.post("/login", {
@@ -15,12 +15,12 @@ export const loginUserRoutes: FastifyPluginAsyncZod = async function (app) {
                 password: z.string().describe('Senha do usuário'),
             }),
             response: {
-                200: z.object({
+                [StatusCodes.OK]: z.object({
                     message: z.string(),
                     token: z.string()
                 }).describe('Esquema de resposta bem-sucedida'),
-                404: z.string().describe('Usuário não encontrado'),
-                401: z.string().describe('Usuário não encontrado')
+                [StatusCodes.NOT_FOUND]: z.string().describe('Usuário não encontrado'),
+                [StatusCodes.UNAUTHORIZED]: z.string().describe('Usuário não encontrado')
             },
             tags: ['Autenticação'],
             summary: "Login de usuário",
@@ -34,22 +34,20 @@ export const loginUserRoutes: FastifyPluginAsyncZod = async function (app) {
                 email
             }
         })
-
-        if(!user){
-            return res.status(404).send("Usuário não encontrado")
-        }
-
-        const encryptedPassword = AES.decrypt(password, env.CRYPTO_SECRET).toString(enc.Utf8);
-
-        if (!user || encryptedPassword !== user.password) {
-            return res.status(401).send('Credenciais inválidas');
+        
+        if (!user || password !== decrypt(user.password)) {
+            return res.status(
+                StatusCodes.NOT_FOUND
+            ).send("Usuário não encontrado");
         }
       
         const token = generateToken(user.id);
 
-        return {
-            message: "Usuário criado com sucesso!",
+        return res.status(
+            StatusCodes.OK
+        ).send({
+            message: 'Usuário autenticado com sucesso',
             token
-        }
+        })
     });
 };

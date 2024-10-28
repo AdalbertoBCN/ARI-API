@@ -5,7 +5,7 @@ import { userPermission } from "@middleware/user-permission";
 import { authToken } from "@middleware/auth-user-token";
 export const getMedicineRoutes: FastifyPluginAsyncZod = async function (app) {
     app.get("/medicines",{
-        preHandler: [authToken, userPermission],
+        preHandler: [authToken],
         schema:{
             response:{
                 200: z.object({

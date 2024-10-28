@@ -13,12 +13,26 @@ export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app
             }),
             response:{
                 200: z.object({
-                    prescriptions: z.array(z.object({
-                        id: z.number(),
-                        medicineId: z.number(),
-                        userId: z.number(),
-                        status: z.boolean()
-                    }))
+                    prescriptions: z.array(
+                        z.object({
+                          id: z.number(),
+                          name: z.string(),
+                          note: z.string().nullable(),
+                          frequency: z.number(),
+                          startDate: z.date(),
+                          endDate: z.date(),
+                          patient: z.object({
+                            id: z.number(),
+                            name: z.string()
+                          }),
+                          medicine: z.object({
+                            id: z.number(),
+                            name: z.string(),
+                            useCase: z.string(),
+                            dosage: z.string()
+                          })
+                        })
+                      )                     
                 }).describe("Lista de prescrições")
             },
             tags: ["Prescrição"],
@@ -29,12 +43,52 @@ export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app
 
         const { patientId } = req.params
 
-        const prescriptions = await prisma.prescriptions.findMany({
-            where:{
+        const prescriptionsResponse = await prisma.prescriptions.findMany({
+            where: {
                 status: true,
-                userId: patientId
+                userId: patientId,
+                medicine: {
+                    status: true
+                }
+            },
+            include: {
+                medicine: {
+                    select:{
+                        id: true,
+                        name: true,
+                        useCase: true,
+                        dosage: true,
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                }
             }
         });
+
+        const prescriptions = prescriptionsResponse.map((prescription) => {
+            return {
+                id: prescription.id,
+                name: prescription.user.name,
+                note: prescription.notes,
+                frequency: prescription.frequencyHours,
+                startDate: prescription.startDate,
+                endDate: prescription.endDate,
+                patient: {
+                    id: prescription.user.id,
+                    name: prescription.user.name
+                },
+                medicine: {
+                    id: prescription.medicine.id,
+                    name: prescription.medicine.name,
+                    useCase: prescription.medicine.useCase,
+                    dosage: prescription.medicine.dosage
+                }
+            }
+        })
 
         return {
             prescriptions

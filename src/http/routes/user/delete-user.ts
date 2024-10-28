@@ -9,7 +9,7 @@ export const deleteUserRoutes: FastifyPluginAsyncZod = async function (app) {
         preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
-                id: z.coerce.number().describe("Identificador do usuário a ser Deletado")
+                patientId: z.coerce.number().describe("Identificador do usuário a ser Deletado")
             }),
             response: {
                 201: z.object({
@@ -21,11 +21,11 @@ export const deleteUserRoutes: FastifyPluginAsyncZod = async function (app) {
             description: 'Esta rota deleta um usuário do banco de dados.',
         }
     }, async (req) => {
-        const { id } = req.body
+        const { patientId } = req.body
 
         await prisma.users.update({
             where: {
-                id
+                id: patientId
             },
             data: {
                 status: false,

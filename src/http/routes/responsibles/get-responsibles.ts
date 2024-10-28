@@ -17,11 +17,12 @@ export const getResponsiblesRoutes: FastifyPluginAsyncZod = async function (app)
                         z.object({
                             id: z.number(),
                             name: z.string(),
+                            email: z.string(),
                         })
                     ).describe("Lista de Responsáveis")
                 }),
             },
-            tags: ["Responsáveis"],
+            tags: ["Responsável"],
             summary: "Listar Responsáveis",
             description: "Esta rota retorna uma lista de responsáveis de um paciente.",
         },
@@ -38,6 +39,7 @@ export const getResponsiblesRoutes: FastifyPluginAsyncZod = async function (app)
                     select: {
                         id: true,
                         name: true,
+                        email: true,
                     },
                 },
             },
@@ -47,6 +49,7 @@ export const getResponsiblesRoutes: FastifyPluginAsyncZod = async function (app)
         const result = responsibles.map(r => ({
             id: r.responsible.id,
             name: r.responsible.name,
+            email: r.responsible.email,
         }));
 
         return { responsibles: result };
