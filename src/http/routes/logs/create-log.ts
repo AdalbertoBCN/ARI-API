@@ -18,7 +18,7 @@ export const createLogRoutes: FastifyPluginAsyncZod = async function (app) {
             description: 'Esta rota cria um log no banco de dados.',
         }
     }, async (req) => {
-        const { historyId} = req.body;
+        const { historyId } = req.body;
 
         await prisma.logs.create({
             data: {

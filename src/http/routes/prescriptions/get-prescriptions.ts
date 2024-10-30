@@ -43,29 +43,42 @@ export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app
 
         const { patientId } = req.params
 
+        const dependents = await prisma.patients_responsibles.findMany({
+            where: {
+                responsibleId: patientId
+            },
+            select: {
+                patientId: true
+            }
+        })
+
+        const dependentIds = dependents.map(dependent => dependent.patientId);
+
         const prescriptionsResponse = await prisma.prescriptions.findMany({
             where: {
-                status: true,
-                userId: patientId,
-                medicine: {
-                    status: true
-                }
+            status: true,
+            userId: {
+                in: [patientId, ...dependentIds]
+            },
+            medicine: {
+                status: true
+            }
             },
             include: {
-                medicine: {
-                    select:{
-                        id: true,
-                        name: true,
-                        useCase: true,
-                        dosage: true,
-                    }
-                },
-                user: {
-                    select: {
-                        id: true,
-                        name: true
-                    }
+            medicine: {
+                select:{
+                id: true,
+                name: true,
+                useCase: true,
+                dosage: true,
                 }
+            },
+            user: {
+                select: {
+                id: true,
+                name: true
+                }
+            }
             }
         });
 

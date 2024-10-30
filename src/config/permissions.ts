@@ -5,7 +5,7 @@ export enum Roles {
     RESPONSIBLE = "RESPONSIBLE"
 }
 
-export async function isResponsible(patientId: number, userId: number): Promise<boolean> {
+async function getResponsible(userId: number, patientId: number): Promise<boolean> {
     const response = await prisma.patients_responsibles.findUnique({
         where: {
             patientId_responsibleId: {
@@ -16,4 +16,8 @@ export async function isResponsible(patientId: number, userId: number): Promise<
     });
 
     return response !== null;
+}
+
+export async function isResponsible(userId: number, patientId: number): Promise<boolean> {
+    return await getResponsible(patientId, userId) || userId === patientId;
 }

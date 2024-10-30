@@ -31,6 +31,10 @@ import { logoutUserRoutes } from "./routes/auth/logout";
 import { createResponsibleRoutes } from "./routes/responsibles/create-responsible";
 import { deleteResponsibleRoutes } from "./routes/responsibles/delete-responsible";
 import { getResponsiblesRoutes } from "./routes/responsibles/get-responsibles";
+import { logedUserRoutes } from "@/auth/loged";
+import cors from '@fastify/cors'
+import { getUserRoutes } from "@/user/get-user";
+import { getAllHistoryRoutes } from "@/history/get-all-history";
 
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -41,6 +45,11 @@ app.setSerializerCompiler(serializerCompiler);
 // Configurando Swagger
 setupSwagger(app);
 
+app.register(cors, {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+})
+
 // Registro das rotas
 
 // Users
@@ -48,6 +57,8 @@ app.register(createUserRoutes);
 app.register(getUsersRoutes);
 app.register(deleteUserRoutes);
 app.register(updateUserRoutes);
+app.register(logedUserRoutes);
+app.register(getUserRoutes);
 
 // Responsibles
 app.register(getResponsiblesRoutes);
@@ -70,6 +81,7 @@ app.register(updatePrescriptionRoutes);
 app.register(createHistoryRoutes);
 app.register(getHistoryRoutes);
 app.register(deleteHistoryRoutes);
+app.register(getAllHistoryRoutes);
 
 // Logs
 app.register(createLogRoutes);

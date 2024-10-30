@@ -5,10 +5,10 @@ import { authToken } from "@middleware/auth-user-token";
 import { userPermission } from "@middleware/user-permission";
 
 export const deleteMedicineRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.delete("/medicines", {
+    app.delete("/medicines/:id", {
         preHandler: [authToken, userPermission],
         schema: {
-            body: z.object({
+            params: z.object({
                 id: z.coerce.number().describe("Identificador do medicamento a ser deletado"),
             }),
             response:{
@@ -21,7 +21,7 @@ export const deleteMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
             description: 'Esta rota deleta um medicamento do banco de dados.',
         }
     }, async (req) => {
-        const { id } = req.body;
+        const { id } = req.params;
 
         await prisma.medicines.update({
             where: { id },

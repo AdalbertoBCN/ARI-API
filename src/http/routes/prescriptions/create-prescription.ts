@@ -9,12 +9,12 @@ export const createPrescriptionRoutes: FastifyPluginAsyncZod = async function (a
         preHandler: [authToken, userPermission],
         schema: {
             body: z.object({
-                userId: z.number().describe("ID do usuário"),
-                medicineId: z.number().describe("ID do medicamento"),
-                frequencyHours: z.number().describe("Horas de frequência"),
+                userId: z.coerce.number().describe("ID do usuário"),
+                medicineId: z.coerce.number().describe("ID do medicamento"),
+                frequencyHours: z.coerce.number().describe("Horas de frequência"),
                 notes: z.string().optional().describe("Notas").optional(),
-                startDate: z.date().describe("Data de início"),
-                endDate: z.date().describe("Data de término"),
+                startDate: z.coerce.date().describe("Data de início"),
+                endDate: z.coerce.date().describe("Data de término"),
             }),
             response: {
                 201: z.object({

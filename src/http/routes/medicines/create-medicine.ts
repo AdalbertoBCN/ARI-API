@@ -24,7 +24,7 @@ export const createMedicineRoutes: FastifyPluginAsyncZod = async function (app) 
         }
     }, async (req) => {
         const { name, useCase, dosage } = req.body;
-
+        
         await prisma.medicines.create({
             data: {
                 name,
