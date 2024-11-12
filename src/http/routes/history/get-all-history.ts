@@ -53,8 +53,6 @@ export const getAllHistoryRoutes: FastifyPluginAsyncZod = async function (app) {
         
         const dependentIds = dependents.map(dependent => dependent.patientId);
 
-        console.log([patientId, ...dependentIds]);
-
         const historyResponse = await prisma.history.findMany({
             where: {
                 status: true,

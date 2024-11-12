@@ -27,18 +27,38 @@ CREATE TABLE "prescriptions" (
     "startDate" DATETIME NOT NULL,
     "endDate" DATETIME NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
-    CONSTRAINT "prescriptions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "prescriptions_medicineId_fkey" FOREIGN KEY ("medicineId") REFERENCES "medicines" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "prescriptions_medicineId_fkey" FOREIGN KEY ("medicineId") REFERENCES "medicines" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "prescriptions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "logs" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "dateIngestion" DATETIME NOT NULL,
+    "historyId" INTEGER NOT NULL,
+    CONSTRAINT "logs_historyId_fkey" FOREIGN KEY ("historyId") REFERENCES "history" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "history" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "prescriptionId" INTEGER NOT NULL,
-    "currentDate" DATETIME NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT true,
     CONSTRAINT "history_prescriptionId_fkey" FOREIGN KEY ("prescriptionId") REFERENCES "prescriptions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "patients_responsibles" (
+    "patientId" INTEGER NOT NULL,
+    "responsibleId" INTEGER NOT NULL,
+
+    PRIMARY KEY ("patientId", "responsibleId"),
+    CONSTRAINT "patients_responsibles_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "patients_responsibles_responsibleId_fkey" FOREIGN KEY ("responsibleId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "patients_responsibles_patientId_responsibleId_key" ON "patients_responsibles"("patientId", "responsibleId");

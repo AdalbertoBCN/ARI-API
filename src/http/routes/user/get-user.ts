@@ -17,6 +17,7 @@ export const getUserRoutes: FastifyPluginAsyncZod = async function (app) {
                         id: z.number(),
                         name: z.string(),
                         email: z.string(),
+                        birthDate: z.date(),
                         status: z.boolean()
                     }).nullable()
                 }).describe("Usuário")
@@ -31,6 +32,13 @@ export const getUserRoutes: FastifyPluginAsyncZod = async function (app) {
         const user = await prisma.users.findUnique({
             where: {
                 id,
+                status: true
+            },
+            select:{
+                id: true,
+                name: true,
+                email: true,
+                birthDate: true,
                 status: true
             }
         });

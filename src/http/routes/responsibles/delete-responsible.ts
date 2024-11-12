@@ -5,7 +5,7 @@ import { userPermission } from '../../../middlewares/user-permission';
 import { authToken } from '../../../middlewares/auth-user-token';
 
 export const deleteResponsibleRoutes: FastifyPluginAsyncZod = async function (app) {
-    app.delete("/responsibles", {
+    app.delete("/responsible", {
         preHandler: [authToken, userPermission],
         schema: {
             body: z.object({

@@ -51,7 +51,7 @@ export const getPrescriptionsRoutes: FastifyPluginAsyncZod = async function (app
                 patientId: true
             }
         })
-
+        
         const dependentIds = dependents.map(dependent => dependent.patientId);
 
         const prescriptionsResponse = await prisma.prescriptions.findMany({
